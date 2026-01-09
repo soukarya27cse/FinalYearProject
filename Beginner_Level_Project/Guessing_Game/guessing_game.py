@@ -48,7 +48,7 @@ if signal:
         else:
             invalid_guess_attempts = 0
             if guess == generated:
-                print("Hurray! You guessed the number!")
+                print("\033[1m\nHurray! You guessed the number!\033[0m")
                 print(f"#guess: {n_guess}\n")
                 if n_guess == 1:
                     print("You must be God!")
