@@ -22,29 +22,41 @@ for attempts in range(0, 4):
         if attempts < 3:
             print("User input is not valid.")
         else:
-            print("Exiting the game.")
+            print("Exiting the game...")
 
 if signal:
     n_guess = 1
     generated = random.randint(1, 100)
     print("I have guessed the number!")
     print("Your turn!", end="\n\n")
+    attempts = 0
     while True:
         guess = int(input("Enter your guess: "))
-        if guess == generated:
-            print("Hurray! You guessed the number!")
-            print(f"#guess: {n_guess}")
-            if n_guess == 1:
-                print("You must be God!")
-            elif n_guess < 5:
-                print("You are a good guesser!")
+        if guess in range(1, 101):
+            attempts = 0
+            if guess == generated:
+                print("Hurray! You guessed the number!")
+                print(f"#guess: {n_guess}")
+                if n_guess == 1:
+                    print("You must be God!")
+                elif n_guess < 5:
+                    print("You are a good guesser!")
+                else:
+                    print("WELL DONE!")
+                print("\n")
+                print("Exiting the game...")
+                break
             else:
-                print("WELL DONE!")
-            break
+                if guess > generated:
+                    print("Too high ")
+                else:
+                    print("Too low")
+                n_guess += 1
+                print("\n")
         else:
-            if guess > generated:
-                print("Too high ")
+            if attempts < 3:
+                print("user input is not valid.")
             else:
-                print("Too low")
-            n_guess += 1
-            print("\n")
+                print("Exiting the game...")
+                break
+            attempts += 1
