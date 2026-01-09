@@ -61,9 +61,9 @@ if signal:
             else:
                 print(f"Guess {n_guess}")
                 if guess > generated:
-                    print("Comment: Too high\n")
+                    print("HINT: Too high\n")
                 else:
-                    print("Comment: Too low\n")
+                    print("HINT: Too low\n")
                 n_guess += 1
 
 else:
