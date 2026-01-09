@@ -47,7 +47,7 @@ The program randomly selects a number between 1 and 100, and the player must gue
     </li>
     <li><strong>How to Run</strong>
         <p>Make sure Python 3 is installed, then run:</p>
-        <pre><code>python guessing_game.py</code></pre>
+        <pre><code>python3 guessing_game.py</code></pre>
     </li>
     <li><strong>Requirements</strong>
         <ul>
