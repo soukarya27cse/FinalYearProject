@@ -19,7 +19,6 @@ The program randomly selects a number between 1 and 100, and the player must gue
             </li>
         </ul>
     </li>
-
     <li><strong>Features</strong>
         <ul>
             <li>Random number generation using Python’s <code>random</code> module</li>
@@ -35,11 +34,10 @@ The program randomly selects a number between 1 and 100, and the player must gue
                     <li>Too low</li>
                 </ul>
             </li>
-            <li>Performance feedback based on number of guesses</li>
+            <li>Performance feedback based on the number of guesses</li>
             <li>Graceful exit after too many invalid attempts</li>
         </ul>
     </li>
-
     <li><strong>Performance Messages</strong>
         <ul>
             <li>1 guess → “You must be God!”</li>
@@ -47,19 +45,16 @@ The program randomly selects a number between 1 and 100, and the player must gue
             <li>6 or more guesses → “WELL DONE!”</li>
         </ul>
     </li>
-
     <li><strong>How to Run</strong>
         <p>Make sure Python 3 is installed, then run:</p>
         <pre><code>python guessing_game.py</code></pre>
     </li>
-
     <li><strong>Requirements</strong>
         <ul>
             <li>Python 3.x</li>
             <li>Uses only the built-in <code>random</code> module</li>
         </ul>
     </li>
-
     <li><strong>Learning Objectives</strong>
         <ul>
             <li>Loops and conditionals</li>
@@ -69,6 +64,3 @@ The program randomly selects a number between 1 and 100, and the player must gue
         </ul>
     </li>
 </ol>
-
-</body>
-</html>
