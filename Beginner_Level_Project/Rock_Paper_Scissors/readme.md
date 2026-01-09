@@ -27,7 +27,7 @@ The player competes against the computer over a user-defined number of rounds.
         <ul>
             <li><code>1</code> → Rock</li>
             <li><code>2</code> → Paper</li>
-            <li><code>3</code> → Scissor</li>
+            <li><code>3</code> → Scissors</li>
         </ul>
     </li>
     <li>
@@ -44,8 +44,8 @@ The player competes against the computer over a user-defined number of rounds.
     <li>
         <strong>Scoring Rules</strong>
         <ul>
-            <li>Rock beats Scissor</li>
-            <li>Scissor beats Paper</li>
+            <li>Rock beats Scissors</li>
+            <li>Scissors beats Paper</li>
             <li>Paper beats Rock</li>
             <li>Identical choices result in a draw for that round</li>
         </ul>
@@ -53,7 +53,7 @@ The player competes against the computer over a user-defined number of rounds.
     <li>
         <strong>How to Run</strong>
         <p>Ensure Python 3 is installed, then run:</p>
-        <pre><code>python rock_paper_scissor.py</code></pre>
+        <pre><code>python rock_paper_scissors.py</code></pre>
     </li>
     <li>
         <strong>Requirements</strong>
@@ -62,7 +62,6 @@ The player competes against the computer over a user-defined number of rounds.
             <li>Uses only the built-in <code>random</code> module</li>
         </ul>
     </li>
-
     <li>
         <strong>Learning Objectives</strong>
         <ul>
