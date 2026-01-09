@@ -13,50 +13,58 @@ for attempts in range(0, 4):
         signal = True
         break
     elif ready == "n":
-        if attempts < 3:
-            print("You have to guess the number.")
-            print("I am waiting for you to guess the number.")
-        else:
-            print("Exiting the game.")
+        print("You have to guess the number.")
+        print("I am waiting for you to guess the number.\n")
     else:
-        if attempts < 3:
-            print("User input is not valid.")
-        else:
-            print("Exiting the game...")
+        print("User input is not valid.")
+
 
 if signal:
     n_guess = 1
+    invalid_guess_attempts = 0
     generated = random.randint(1, 100)
     print("I have guessed the number!")
     print("Your turn!", end="\n\n")
-    attempts = 0
+
     while True:
-        guess = int(input("Enter your guess: "))
-        if guess in range(1, 101):
-            attempts = 0
+        try:
+            guess = int(input("Enter your guess: "))
+        except ValueError:
+            invalid_guess_attempts += 1
+            print("Please enter a valid number. An integer in the range from 1 to 100.\n")
+            if invalid_guess_attempts > 3:
+                print("Too many attempts!")
+                print("Exiting the game...")
+                break
+            continue
+
+        if guess > 100 or guess < 0:
+            invalid_guess_attempts += 1
+            print("Please enter a valid number. An integer in the range from 1 to 100.\n")
+            if invalid_guess_attempts > 3:
+                print("Too many attempts!")
+                print("Exiting the game...")
+                break
+        else:
+            invalid_guess_attempts = 0
             if guess == generated:
                 print("Hurray! You guessed the number!")
-                print(f"#guess: {n_guess}")
+                print(f"#guess: {guess}\n")
                 if n_guess == 1:
                     print("You must be God!")
-                elif n_guess < 5:
+                elif n_guess < 6:
                     print("You are a good guesser!")
                 else:
                     print("WELL DONE!")
-                print("\n")
                 print("Exiting the game...")
                 break
             else:
                 if guess > generated:
-                    print("Too high ")
+                    print("Too high\n")
                 else:
-                    print("Too low")
+                    print("Too low\n")
                 n_guess += 1
-                print("\n")
-        else:
-            if attempts < 3:
-                print("user input is not valid.")
-            else:
-                print("Exiting the game...")
-                break
-            attempts += 1
+
+else:
+    print("Too many attempts!")
+    print("Exiting the game...")
