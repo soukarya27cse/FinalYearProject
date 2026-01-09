@@ -49,7 +49,7 @@ if signal:
             invalid_guess_attempts = 0
             if guess == generated:
                 print("Hurray! You guessed the number!")
-                print(f"#guess: {guess}\n")
+                print(f"#guess: {n_guess}\n")
                 if n_guess == 1:
                     print("You must be God!")
                 elif n_guess < 6:
@@ -59,10 +59,11 @@ if signal:
                 print("Exiting the game...")
                 break
             else:
+                print(f"Guess {n_guess}")
                 if guess > generated:
-                    print("Too high\n")
+                    print("Comment: Too high\n")
                 else:
-                    print("Too low\n")
+                    print("Comment: Too low\n")
                 n_guess += 1
 
 else:
