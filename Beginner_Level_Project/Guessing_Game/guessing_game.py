@@ -1,6 +1,6 @@
 import random
 
-print("--GUESSING GAME--")
+print("--NUMBER GUESSING GAME--")
 print("Welcome to the guessing game")
 print("I am thinking of a number between 1 and 100")
 print("And, my dear friend, You have to guess the number.", end='\n\n')
