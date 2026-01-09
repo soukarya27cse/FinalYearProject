@@ -45,7 +45,7 @@ and challenges the player to guess it correctly.
     <li>
         <strong>How to Run</strong>
         <p>Make sure Python 3 is installed, then run:</p>
-        <pre><code>python word_guessing_game.py</code></pre>
+        <pre><code>python3 word_guessing_game.py</code></pre>
     </li>
     <li>
         <strong>Requirements</strong>
