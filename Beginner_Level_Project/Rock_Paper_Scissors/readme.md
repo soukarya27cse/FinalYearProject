@@ -53,7 +53,7 @@ The player competes against the computer over a user-defined number of rounds.
     <li>
         <strong>How to Run</strong>
         <p>Ensure Python 3 is installed, then run:</p>
-        <pre><code>python rock_paper_scissors.py</code></pre>
+        <pre><code>python3 rock_paper_scissors.py</code></pre>
     </li>
     <li>
         <strong>Requirements</strong>
