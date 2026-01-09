@@ -38,7 +38,7 @@ if signal:
                 break
             continue
 
-        if guess > 100 or guess < 0:
+        if guess > 100 or guess < 1:
             invalid_guess_attempts += 1
             print("Please enter a valid number. An integer in the range from 1 to 100.\n")
             if invalid_guess_attempts > 3:
