@@ -1,40 +1,48 @@
-import random
-import string
+import random    # used for random selection
+import string    # used to access character sets
 
+# displaying program title and instruction
 print("---PASSWORD GENERATOR---")
 print("Welcome to the password generator!")
 print("To generate a strong password, number of characters must be equal to or greater than 6.")
+
 invalid_attempt = 0
 n_char = 0
+
+# loop to look for a valid number of characters
 while True:
     try:
+        # taking user input for password length
         n_char = int(input("Enter number of characters: "))
+        # checking minimum length condition
+        if n_char < 6:
+            invalid_attempt += 1
+            print("Too few characters\n")
+        else:
+            break
     except ValueError:
+        # handling non-integer input
         invalid_attempt += 1
         print("Please enter a positive integer\n")
-        continue
 
-    if n_char < 6:
-        invalid_attempt += 1
-        print("Too few characters\n")
-    else:
-        break
-
+    # exiting after too many invalid attempts
     if invalid_attempt > 3:
         print("Too many attempts")
         print("Exiting the program...")
         exit()
 
-
+# creating character sets
 alphabet_set = list(string.ascii_letters)
 digit_set = list(string.digits)
 punctuation_set = list(string.punctuation)
 
-invalid_attempt = 0
+invalid_attempt = 0 # resetting invalid attempt counter
 
 print("\n")
 print("Character types: ")
-print("To include alphabets\n\tpress 1 else 0: ")
+
+# asking to include alphabet
+print("To include alphabet\n\tpress 1 else 0: ")
 while True:
     alphabet = input("\t[->] ")
     if alphabet not in ['0', '1']:
@@ -50,6 +58,8 @@ while True:
         exit()
 
 print("\n")
+
+# asking to include sigits
 print("To include digits\n\tpress 2 else 0: ")
 while True:
     digit = input("\t[->] ")
@@ -66,6 +76,8 @@ while True:
         exit()
 
 print("\n")
+
+# asking to include special characters
 print("To include special character(s)\n\tpress 3 else 0: ")
 while True:
     special_char = input("\t[->] ")
@@ -80,14 +92,20 @@ while True:
         print("Exiting the program...")
         exit()
 
+# combining user choices into a single string
 combination = alphabet + digit + special_char
 
+# initializing counters for character distribution
 part, a, b, c = 0, 0, 0, 0
-result = []
+result = [] # list to store generated password characters
+
+# if all character types are selected
 if combination.count('0') == 0:
     part = int(.33 * n_char)
     a, b, c = part, part, part
     tmp = n_char - (3 * part)
+
+    # distributing remaining character(s) randomly
     if tmp > 0:
         selected = random.choice(['a', 'b', 'c'])
         if selected == 'a':
@@ -97,6 +115,7 @@ if combination.count('0') == 0:
         else:
             c += tmp
 
+# if exactly one character type is excluded
 elif combination.count('0') == 1:
     part = int(0.33 * n_char)
     tmp = n_char - (3 * part)
@@ -126,18 +145,21 @@ elif combination.count('0') == 1:
             else:
                 b += tmp
 
+# if fewer than two character types are selected
 else:
     print("Strong password must contain at least one character type!")
     print("Exiting the program...")
     exit()
 
+# adding random characters to the result list
 for i in range(a):
     result.append(random.choice(alphabet_set))
 for i in range(b):
     result.append(random.choice(digit_set))
 for i in range(c):
     result.append(random.choice(punctuation_set))
-random.shuffle(result)
+random.shuffle(result) # shuffling the password characters
 
+# displaying the generated password
 print(f"Your password is: {''.join(result)}")
 print("Exiting the program...")
