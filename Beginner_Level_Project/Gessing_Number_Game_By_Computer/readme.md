@@ -1,47 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Guessing Number by Machine – README</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 40px;
-            background-color: #f7f7f7;
-            color: #2c3e50;
-            line-height: 1.7;
-        }
-        h1, h2, h3 {
-            color: #1a5276;
-        }
-        pre, code {
-            background-color: #eeeeee;
-            padding: 6px;
-            border-radius: 4px;
-            font-family: Consolas, monospace;
-        }
-        pre {
-            overflow-x: auto;
-        }
-        ul {
-            margin-left: 20px;
-        }
-        .highlight {
-            background-color: #e8f8f5;
-            border-left: 5px solid #1abc9c;
-            padding: 12px;
-            margin: 20px 0;
-        }
-        .note {
-            background-color: #fff3cd;
-            border-left: 5px solid #f1c40f;
-            padding: 12px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-
 <h1>Guessing Number by Machine</h1>
 
 <p>
@@ -251,5 +207,3 @@ It is both a fun game and a solid educational example of
 <strong>divide-and-conquer strategies</strong>.
 </p>
 
-</body>
-</html>
