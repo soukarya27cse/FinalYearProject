@@ -92,8 +92,8 @@ Based on the hint:
 </p>
 
 <ul>
-    <li><strong>Up (U)</strong> → the lower bound is updated</li>
-    <li><strong>Down (D)</strong> → the upper bound is updated</li>
+    <li><strong>Up (u)</strong> → the lower bound is updated</li>
+    <li><strong>Down (d)</strong> → the upper bound is updated</li>
 </ul>
 
 <p>
