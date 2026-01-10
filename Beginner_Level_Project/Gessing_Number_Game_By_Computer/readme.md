@@ -34,8 +34,8 @@ The user has up to <strong>4 attempts</strong> to respond correctly with:
 </p>
 
 <ul>
-    <li><code>Y</code> – to start the game</li>
-    <li><code>N</code> – to delay the start</li>
+    <li><code>y</code> – to start the game</li>
+    <li><code>n</code> – to delay the start</li>
 </ul>
 
 <p>
