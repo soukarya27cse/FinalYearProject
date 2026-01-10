@@ -3,10 +3,15 @@ import random
 print("\033[1m--ROCK PAPER SCISSORS--\033[0m")
 print("Welcome to the Rock Paper Scissors game!")
 
+# mapping numeric inputs to game choices
 inventory = {1 : 'paper', 2 : 'rock', 3 : 'scissors'}
+
+# initializing number of rounds and scores
 match, score_m, score_y = 0, 0, 0
 
 invalid_attempts = 0
+
+# asking user for the number of rounds
 print("Enter the number of rounds: ")
 while True:
     try:
@@ -28,10 +33,12 @@ while True:
     else:
         break
 
+# displaying instructions
 print("For Rock, press 1")
 print("For Paper, press 2")
 print("For Scissor, press 3")
 
+# main game loop
 for turn in range(match):
     user = 0
     print(f"\nRound {turn + 1}")
@@ -40,15 +47,13 @@ for turn in range(match):
     while True:
         try:
             user = int(input("[->] "))
+            if user not in range(1, 4):
+                print("Please enter a valid input!\n")
+            else:
+                    break
         except ValueError:
             print("Please enter a valid input!\n")
-            continue
-
-        if user not in range(1, 4):
-            print("Please enter a valid input!\n")
-        else:
-            break
-
+        
     print(f"Me: {inventory[computer]}\t You: {inventory[user]}")
     if user == computer:
         continue
@@ -59,8 +64,12 @@ for turn in range(match):
             score_m += 1
 
 print("\n")
+
+# displaying final score
 print(f"Your Score: {score_y}")
 print(f"My Score: {score_m}")
+
+# displaying winner
 if score_m > score_y:
     print("I win!")
 elif score_m < score_y:
