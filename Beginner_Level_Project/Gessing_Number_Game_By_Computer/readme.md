@@ -82,9 +82,10 @@ After each guess, the user provides feedback:
 </p>
 
 <ul>
-    <li><code>Y</code> – the guess is correct</li>
-    <li><code>U</code> – the actual number is higher</li>
-    <li><code>D</code> – the actual number is lower</li>
+    <li><code>y</code> – the guess is correct</li>
+    <li><code>n</code> - the guess is wrong</li>
+    <li><code>u</code> – the actual number is higher</li>
+    <li><code>d</code> – the actual number is lower</li>
 </ul>
 
 <p>
