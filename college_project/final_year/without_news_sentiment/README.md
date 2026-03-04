@@ -18,7 +18,7 @@ A professional stock prediction dashboard built with PyTorch and Streamlit, styl
 ---
 
 ## Project Structure
-
+(on local system)<br>
 ```
 ticket-teller/
 ├── app.py               # Entry point — orchestration only, no ML logic
