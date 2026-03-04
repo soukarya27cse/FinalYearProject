@@ -87,14 +87,7 @@ plotly>=5.20
 
 ## Setup
 
-**1. Clone the repository**
-
-```bash
-git clone https://github.com/your-username/ticket-teller.git
-cd ticket-teller
-```
-
-**2. Create and activate a virtual environment**
+**1. Create and activate a virtual environment**
 
 ```bash
 python -m venv .venv
@@ -106,13 +99,13 @@ source .venv/bin/activate
 .venv\Scripts\activate
 ```
 
-**3. Install dependencies**
+**2. Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**4. Run the app**
+**3. Run the app**
 
 ```bash
 streamlit run app.py
