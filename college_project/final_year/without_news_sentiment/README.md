@@ -31,6 +31,8 @@ ticket-teller/
     └── ui.py            # CSS injection, sidebar widgets, reusable HTML components
 ```
 
+---
+
 ### Module responsibilities
 
 <table>
@@ -63,6 +65,7 @@ ticket-teller/
     </tr>
   </tbody>
 </table>
+
 ---
 
 ## Requirements
