@@ -11,11 +11,7 @@ import streamlit as st
 # ── Dataset ────────────────────────────────────────────────────────────────────
 
 class StockDataset(Dataset):
-    """Wraps (X, y) numpy arrays as a PyTorch Dataset.
-
-    y is stored with shape (N, 1) to match the model's (N, 1) output,
-    avoiding any silent broadcasting inside MSELoss.
-    """
+    """Wraps (X, y) numpy arrays as a PyTorch Dataset."""
     def __init__(self, X: np.ndarray, y: np.ndarray):
         self.X = torch.tensor(X, dtype=torch.float32)
         self.y = torch.tensor(y, dtype=torch.float32).unsqueeze(1)
@@ -41,15 +37,15 @@ def make_loaders(
 # ── Model ──────────────────────────────────────────────────────────────────────
 
 class LSTMModel(nn.Module):
-    """2-layer LSTM with a dropout layer before the output FC head.
+    """2-layer LSTM with configurable hidden size, layers, and dropout.
 
     Args:
         input_size  : number of input features per time-step
-        hidden_size : LSTM hidden units (default 64)
+        hidden_size : LSTM hidden units (default 128 — increased from 64)
         num_layers  : stacked LSTM layers (default 2)
         dropout     : dropout probability applied after the last LSTM step
     """
-    def __init__(self, input_size: int, hidden_size: int = 64,
+    def __init__(self, input_size: int, hidden_size: int = 128,
                  num_layers: int = 2, dropout: float = 0.2):
         super().__init__()
         self.hidden_size = hidden_size
@@ -78,16 +74,16 @@ def train_model(
     epochs:       int,
     patience:     int,
     device:       torch.device,
-) -> LSTMModel:
-    """Train with early stopping and ReduceLROnPlateau scheduling.
-
-    Streams epoch-level progress to Streamlit via st.progress + st.empty,
-    then restores the best-validation-loss weights before returning.
+    hidden_size:  int   = 128,
+    dropout:      float = 0.2,
+) -> tuple["LSTMModel", dict]:
+    """Train with early stopping, ReduceLROnPlateau, and gradient clipping.
 
     Returns:
-        Trained LSTMModel (best weights loaded).
+        model       : Trained LSTMModel with best-validation weights loaded.
+        loss_history: Dict with 'train' and 'val' loss lists for plotting.
     """
-    model     = LSTMModel(input_size=input_size).to(device)
+    model     = LSTMModel(input_size=input_size, hidden_size=hidden_size, dropout=dropout).to(device)
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
@@ -97,6 +93,7 @@ def train_model(
     best_val_loss    = float('inf')
     patience_counter = 0
     best_state       = None
+    loss_history     = {'train': [], 'val': []}
 
     bar    = st.progress(0)
     status = st.empty()
@@ -110,6 +107,8 @@ def train_model(
             loss = criterion(model(X_b), y_b)
             optimizer.zero_grad()
             loss.backward()
+            # Gradient clipping — prevents exploding gradients in deep LSTMs
+            nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
             train_loss += loss.item()
         train_loss /= len(train_loader)
@@ -123,6 +122,8 @@ def train_model(
         val_loss /= len(val_loader)
 
         scheduler.step(val_loss)
+        loss_history['train'].append(train_loss)
+        loss_history['val'].append(val_loss)
 
         # ── progress UI ──
         bar.progress((epoch + 1) / epochs)
@@ -149,7 +150,7 @@ def train_model(
 
     if best_state:
         model.load_state_dict(best_state)
-    return model
+    return model, loss_history
 
 
 # ── Inference helpers ──────────────────────────────────────────────────────────
@@ -170,23 +171,21 @@ def predict_test_set(
     with torch.no_grad():
         for X_b, y_b in test_loader:
             preds.extend(model(X_b.to(device)).cpu().numpy().flatten())
-            actuals.extend(y_b.numpy().flatten())   # y_b is (batch, 1) — flatten to 1-D
+            actuals.extend(y_b.numpy().flatten())
     return np.array(preds), np.array(actuals)
 
 
 def monte_carlo_forecast(
-    model:        LSTMModel,
-    scaled_data:  np.ndarray,
-    seq_length:   int,
+    model:         LSTMModel,
+    scaled_data:   np.ndarray,
+    seq_length:    int,
     forecast_days: int,
-    device:       torch.device,
-    n_samples:    int = 50,
+    device:        torch.device,
+    n_samples:     int = 100,
 ) -> list[dict]:
     """Recursive multi-step forecast with Monte Carlo Dropout uncertainty.
 
-    At each future step the model is kept in train() mode so dropout remains
-    active, producing `n_samples` stochastic forward passes.  The mean and
-    std of those samples form the point-estimate and uncertainty band.
+    n_samples increased to 100 (from 50) for tighter, more stable uncertainty bands.
 
     Returns:
         List of dicts: [{'mean': float, 'std': float}, ...]  (length = forecast_days)
@@ -198,7 +197,7 @@ def monte_carlo_forecast(
 
     for _ in range(forecast_days):
         samples = []
-        model.train()   # enable dropout
+        model.train()   # enable dropout for MC sampling
         for _ in range(n_samples):
             with torch.no_grad():
                 samples.append(model(cur_input).cpu().numpy().flatten()[0])
@@ -207,10 +206,10 @@ def monte_carlo_forecast(
         std_p  = float(np.std(samples))
         results.append({'mean': mean_p, 'std': std_p})
 
-        # Shift window forward by one step, inserting the mean prediction
-        nxt          = np.roll(last_seq[0].copy(), -1, axis=0)
-        nxt[-1, 3]   = mean_p   # index 3 = Close
-        last_seq     = nxt.reshape(1, seq_length, -1)
-        cur_input    = torch.from_numpy(last_seq).float().to(device)
+        # Shift window: insert mean prediction at Close position
+        nxt        = np.roll(last_seq[0].copy(), -1, axis=0)
+        nxt[-1, 3] = mean_p   # index 3 = Close
+        last_seq   = nxt.reshape(1, seq_length, -1)
+        cur_input  = torch.from_numpy(last_seq).float().to(device)
 
     return results
