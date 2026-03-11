@@ -1,15 +1,15 @@
 """
-app.py — Ticker-Teller v2  |  Entry point
+app.py — Ticker-Teller v3  |  Entry point
 Run with:  streamlit run app.py
 
 Module layout
 ─────────────
 app.py          ← you are here (orchestration only)
 src/
-  data.py       ← fetch_data, feature engineering, sequencing, splits
-  model.py      ← LSTMModel, StockDataset, train_model, inference helpers
-  charts.py     ← Plotly figure builders
-  ui.py         ← CSS injection, sidebar widgets, reusable HTML components
+  data.py       ← fetch_data, feature engineering (+MACD, +Bollinger Bands)
+  model.py      ← LSTMModel (configurable), train_model (+grad clipping, +loss history)
+  charts.py     ← build_price_chart (+RSI subplot), build_loss_chart, build_macd_chart
+  ui.py         ← CSS injection, sidebar (+hidden_size, +dropout), reusable components
 """
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from src.data   import (fetch_data, add_technical_features, build_sequences,
                          split_data, inverse_close, FEATURE_COLS)
 from src.model  import (make_loaders, train_model,
                          predict_test_set, monte_carlo_forecast)
-from src.charts import build_price_chart
+from src.charts import build_price_chart, build_loss_chart, build_macd_chart
 from src.ui     import (inject_css, render_header, render_sidebar,
                          section_header, signal_badge, split_pills, render_about_tab)
 
@@ -47,6 +47,8 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
     forecast_days = cfg["forecast_days"]
     epochs        = cfg["epochs"]
     patience      = cfg["patience"]
+    hidden_size   = cfg["hidden_size"]
+    dropout       = cfg["dropout"]
 
     if not ticker:
         st.error("Please enter a ticker symbol.")
@@ -86,12 +88,14 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
 
     # 4 — Train ────────────────────────────────────────────────────────────────
     section_header("🧠 Model Training")
-    model = train_model(
+    model, loss_history = train_model(
         train_loader, val_loader,
-        input_size = len(FEATURE_COLS),
-        epochs     = epochs,
-        patience   = patience,
-        device     = device,
+        input_size  = len(FEATURE_COLS),
+        epochs      = epochs,
+        patience    = patience,
+        device      = device,
+        hidden_size = hidden_size,
+        dropout     = dropout,
     )
 
     # 5 — Test-set predictions ─────────────────────────────────────────────────
@@ -102,9 +106,9 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
     # 6 — Monte Carlo future forecast ──────────────────────────────────────────
     mc_raw = monte_carlo_forecast(model, scaled_data, seq_length, forecast_days, device)
 
-    future_dates                = pd.date_range(start=df_raw.index[-1], periods=forecast_days + 1, freq="B")[1:]
-    price_range                 = float(df_raw["Close"].max()) - float(df_raw["Close"].min())
-    future_means, future_stds   = [], []
+    future_dates              = pd.date_range(start=df_raw.index[-1], periods=forecast_days + 1, freq="B")[1:]
+    price_range               = float(df_raw["Close"].max()) - float(df_raw["Close"].min())
+    future_means, future_stds = [], []
 
     for item in mc_raw:
         future_means.append(float(inverse_close(np.array([item["mean"]]), scaler, len(FEATURE_COLS))[0]))
@@ -122,6 +126,9 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
     )
     dir_acc = (correct / (len(pred_prices) - 1)) * 100 if len(pred_prices) > 1 else 0
 
+    # MAE on test set
+    mae = float(np.mean(np.abs(pred_prices - actual_prices)))
+
     if   pct_change >  1.0: signal, badge_class = "STRONG BUY",  "badge-bull"
     elif pct_change >  0.0: signal, badge_class = "BUY",         "badge-bull"
     elif pct_change < -1.0: signal, badge_class = "STRONG SELL", "badge-bear"
@@ -130,24 +137,34 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
     # 8 — Render summary ───────────────────────────────────────────────────────
     section_header("📊 Summary")
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("CURRENT PRICE",              f"${last_price:.2f}")
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("CURRENT PRICE",                 f"${last_price:.2f}")
     c2.metric(f"FORECAST (+{forecast_days}d)", f"${next_price:.2f}", f"{pct_change:+.2f}%")
-    c3.metric("DIRECTIONAL ACCURACY",       f"{dir_acc:.1f}%")
-    c4.metric("ANN. VOLATILITY",            f"{volatility:.2%}")
+    c3.metric("DIRECTIONAL ACCURACY",          f"{dir_acc:.1f}%")
+    c4.metric("MAE (Test Set)",                f"${mae:.2f}")
+    c5.metric("ANN. VOLATILITY",               f"{volatility:.2%}")
 
     signal_badge(signal, badge_class)
     split_pills(val_split, split - val_split, len(X_test))
 
     # 9 — Tabs ─────────────────────────────────────────────────────────────────
-    tab1, tab2, tab3 = st.tabs(["📊  PRICE CHART", "📉  MODEL PERFORMANCE", "ℹ️  ABOUT"])
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "📊  PRICE CHART", "📉  MODEL PERFORMANCE", "📈  MACD", "ℹ️  ABOUT"
+    ])
 
     with tab1:
         test_start_idx = seq_length + split
         test_idx       = df.index[test_start_idx: test_start_idx + len(actual_prices)]
 
+        # Attach computed indicator columns to df_raw for chart overlays
+        df_with_indicators = df_raw.copy()
+        df_feat = add_technical_features(df_raw)
+        for col in ['RSI', 'BB_Upper', 'BB_Lower', 'MACD', 'MACD_Signal']:
+            if col in df_feat.columns:
+                df_with_indicators[col] = df_feat[col]
+
         fig = build_price_chart(
-            df_raw        = df_raw,
+            df_raw        = df_with_indicators,
             test_idx      = test_idx,
             actual_prices = actual_prices,
             pred_prices   = pred_prices,
@@ -158,15 +175,31 @@ if st.button(f"🚀  Run Analysis for  {cfg['ticker']}", type="primary", use_con
         st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
+        section_header("Training Loss Curves")
+        fig_loss = build_loss_chart(loss_history)
+        st.plotly_chart(fig_loss, use_container_width=True)
+
         section_header("Test Set Performance")
-        c1, c2, c3 = st.columns(3)
+        c1, c2, c3, c4 = st.columns(4)
         c1.metric("DIRECTIONAL ACCURACY", f"{dir_acc:.2f}%")
-        c2.metric("TEST SAMPLES",         str(len(pred_prices)))
-        c3.metric("FORECAST HORIZON",     f"{forecast_days}d")
-        st.info(
-            "Loss curves are shown in the training console above. "
-            "Early stopping restores best-epoch weights automatically."
+        c2.metric("MAE (Test Set)",        f"${mae:.2f}")
+        c3.metric("TEST SAMPLES",          str(len(pred_prices)))
+        c4.metric("BEST VAL LOSS",         f"{min(loss_history['val']):.5f}")
+        st.caption(
+            f"Trained for {len(loss_history['train'])} epochs  ·  "
+            f"Best epoch: {int(np.argmin(loss_history['val'])) + 1}  ·  "
+            f"Hidden size: {hidden_size}  ·  Dropout: {dropout}"
         )
 
     with tab3:
+        section_header("MACD — Moving Average Convergence Divergence")
+        df_feat2 = add_technical_features(df_raw)
+        fig_macd = build_macd_chart(df_feat2)
+        if fig_macd:
+            st.plotly_chart(fig_macd, use_container_width=True)
+            st.caption("MACD = EMA(12) − EMA(26)  ·  Signal = EMA(9) of MACD  ·  Histogram = MACD − Signal")
+        else:
+            st.info("MACD data not available.")
+
+    with tab4:
         render_about_tab()
