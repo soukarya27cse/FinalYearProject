@@ -219,12 +219,18 @@ def render_sidebar() -> dict:
         st.markdown('<div class="sidebar-label" style="margin-top:1rem">Early Stopping Patience</div>', unsafe_allow_html=True)
         patience = st.slider("", 3, 20, 10, label_visibility="collapsed")
 
+        st.markdown('<div class="sidebar-label" style="margin-top:1rem">LSTM Hidden Size</div>', unsafe_allow_html=True)
+        hidden_size = st.select_slider("", options=[32, 64, 128, 256], value=128, label_visibility="collapsed")
+
+        st.markdown('<div class="sidebar-label" style="margin-top:1rem">Dropout Rate</div>', unsafe_allow_html=True)
+        dropout = st.slider("", 0.0, 0.5, 0.2, step=0.05, label_visibility="collapsed")
+
         st.divider()
         st.markdown("""
 <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#94a3b8;line-height:2">
   <span style="color:#38bdf8">●</span> OHLCV + Volume inputs<br>
-  <span style="color:#818cf8">●</span> SMA(10), SMA(50), RSI features<br>
-  <span style="color:#e879f9">●</span> LSTM + Dropout regularisation<br>
+  <span style="color:#818cf8">●</span> SMA / RSI / MACD / BB features<br>
+  <span style="color:#e879f9">●</span> LSTM + Gradient Clipping<br>
   <span style="color:#4ade80">●</span> Monte Carlo uncertainty bands<br>
   <span style="color:#fbbf24">●</span> Early stopping optimisation
 </div>
@@ -237,21 +243,25 @@ def render_sidebar() -> dict:
         forecast_days = forecast_days,
         epochs        = epochs,
         patience      = patience,
+        hidden_size   = hidden_size,
+        dropout       = dropout,
     )
 
 
 def render_about_tab() -> None:
     st.markdown("""
 <div style="font-family:'Inter',sans-serif;color:#e2e8f0;line-height:1.8">
-<div class="section-header">🤖 About QuantPredict AI</div>
+<div class="section-header">🤖 About Ticker-Teller</div>
 <p>Uses a <strong style="color:#38bdf8">Long Short-Term Memory (LSTM)</strong> neural network
 to forecast stock closing prices from multi-variate technical inputs.</p>
-<p><strong style="color:#818cf8">Key Features</strong></p>
+<p><strong style="color:#818cf8">Features</strong></p>
 <ul>
-  <li><strong>Multi-Variate</strong> — OHLCV data plus RSI, SMA(10), SMA(50)</li>
-  <li><strong>Uncertainty Bands</strong> — Monte Carlo Dropout produces calibrated confidence intervals</li>
+  <li><strong>Multi-Variate</strong> — OHLCV + RSI, SMA(10/50), MACD, Bollinger Bands (12 features)</li>
+  <li><strong>Uncertainty Bands</strong> — Monte Carlo Dropout (100 samples) for calibrated confidence</li>
+  <li><strong>Gradient Clipping</strong> — prevents exploding gradients during deep LSTM training</li>
   <li><strong>Early Stopping</strong> — halts when val loss plateaus, restores best weights</li>
   <li><strong>LR Scheduling</strong> — ReduceLROnPlateau halves learning rate when progress stalls</li>
+  <li><strong>Loss Curves</strong> — train vs. val MSE visualised per epoch in Model Performance tab</li>
 </ul>
 <p style="margin-top:1.2rem;padding:0.8rem 1rem;background:#450a0a;border:1px solid #991b1b;
    border-radius:8px;font-size:0.82rem;color:#fca5a5">
