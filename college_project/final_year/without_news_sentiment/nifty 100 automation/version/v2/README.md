@@ -146,7 +146,7 @@ For each of the 100 NIFTY companies:
 ## 3. Project Layout
 
 ```
-your-project/
+ticker-teller/
 ├── nifty100_tracker.py        ← this file (v2)
 ├── requirements.txt
 ├── src/
