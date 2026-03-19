@@ -1,4 +1,4 @@
-# 📈 NIFTY 100 Tracker — v2 (Smart Retry)
+# NIFTY 100 Tracker — v2 (Smart Retry)
 
 ```
 nifty100_tracker.py  ·  v2.0  ·  Python 3.10+  ·  PyTorch 2.x
