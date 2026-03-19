@@ -1,4 +1,4 @@
-# 📈 NIFTY 100 Tracker — v1
+# NIFTY 100 Tracker — v1
 
 ```
 nifty100_tracker.py  ·  v1.0  ·  Python 3.10+  ·  PyTorch 2.x
