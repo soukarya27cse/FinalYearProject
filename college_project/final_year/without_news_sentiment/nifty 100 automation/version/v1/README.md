@@ -63,7 +63,7 @@ fires. This repeats every calendar day for 30 days.
 ## 2. Project Layout
 
 ```
-your-project/
+ticker-teller/
 ├── nifty100_tracker.py        ← this file (v1)
 ├── requirements.txt
 ├── src/
