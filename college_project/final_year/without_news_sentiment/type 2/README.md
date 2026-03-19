@@ -53,21 +53,21 @@ information sources** that require different inductive biases to process:
 ```
 Input  (B, T, 22)
   │
-  ├─── x_price  (B, T, 16) ─────────────────────────────────────────┐
+  ├─── x_price  (B, T, 16) ─────────────────────────────────────────-┐
   │    TemporalConvBlock                                             │
-  │      ├─ Conv1d(kernel=3)  ─┐                                    │
-  │      └─ Conv1d(kernel=5)  ─┴─ Concat → Conv1d(1×1) → GELU      │
+  │      ├─ Conv1d(kernel=3)  ─┐                                     │
+  │      └─ Conv1d(kernel=5)  ─┴─ Concat → Conv1d(1×1) → GELU        │
   │      └─ Residual shortcut                                        │
   │    BiLSTM(hidden=128, layers=2, bidirectional=True)              │
   │    MultiHeadSelfAttention(d=256, heads=4)                        │
   │    → (B, T, 256)                                                 │
   │                                                                  ├──► CrossAttention
-  └─── x_factor (B, T, 6) ──────────────────────────────────────┐   │    (price queries
-       Linear(6 → 32) → GELU                                    │   │     factor K/V)
-       BiLSTM(hidden=32, layers=1, bidirectional=True)           │   │         │
-       FactorSelfAttention(d=64, heads=4)                        │   │    TemporalAttnPool
-       → (B, T, 64)                                              │   │    (learned weights
-       ──────────────────────────────────────────────────────────┘   ┘     over time steps)
+  └─── x_factor (B, T, 6) ──────────────────────────────────────┐    │    (price queries
+       Linear(6 → 32) → GELU                                    │    │     factor K/V)
+       BiLSTM(hidden=32, layers=1, bidirectional=True)          │    │         │
+       FactorSelfAttention(d=64, heads=4)                       │    │    TemporalAttnPool
+       → (B, T, 64)                                             │    │    (learned weights
+       ─────────────────────────────────────────────────────────┘    ┘     over time steps)
                                                                                   │
                                                                              FC Head
                                                                           Linear(256→128)
