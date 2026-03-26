@@ -1,5 +1,5 @@
 """
-app.py — Ticker-Teller v3  |  Entry point
+app.py — Ticker-Teller | Entry point
 Run with:  streamlit run app.py
 
 Module layout
