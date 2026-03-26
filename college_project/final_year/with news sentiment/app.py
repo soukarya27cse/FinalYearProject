@@ -1,5 +1,5 @@
 """
-app.py — Ticker-Teller v2  |  Professional Stock Prediction Dashboard
+app.py — Ticker-Teller  |  Professional Stock Prediction Dashboard
 Ensemble of LSTM time-series forecasting + LLM news sentiment analysis
 """
 import streamlit as st
