@@ -1,10 +1,6 @@
 """
 ensemble.py — Learned ensemble combining LSTM price + sentiment impact score
 
-Inspired by ticker-teller's Notebook 7 (Ensemble.ipynb) which uses
-Linear Regression models (lr_models/) to combine signals rather than
-a fixed multiplier.
-
 Pipeline:
   1. Compute ImpactScore from sentiment (Notebook 6 approach):
        impact = sentiment_score × article_recency_weight × source_credibility
