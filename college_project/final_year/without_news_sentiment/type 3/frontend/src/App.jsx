@@ -130,7 +130,7 @@ export default function App() {
           </div>
           <div className="tt-meta">
             FastAPI + React/Vite<br />
-            <span className="tt-meta-version">v3.1.0</span>
+            <span className="tt-meta-version">v3.0.0</span>
           </div>
         </div>
 
@@ -277,7 +277,7 @@ export default function App() {
             {/* Footer */}
             <div className="footer">
               <span>
-                Ticker-Teller v3.1 &nbsp;·&nbsp; {ticker} &nbsp;·&nbsp;
+                Ticker-Teller v3.0 &nbsp;·&nbsp; {ticker} &nbsp;·&nbsp;
                 {result.features?.total ?? 31} features ({result.features?.price ?? 17}p + {result.features?.macro ?? 14}m) &nbsp;·&nbsp;
                 {result.device?.toUpperCase() ?? 'CPU'}
               </span>
