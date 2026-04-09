@@ -54,7 +54,7 @@ FRONTEND_PID=""
 print_banner() {
   echo ""
   echo -e "${C}  ╔═══════════════════════════════════════════════════════════════╗${N}"
-  echo -e "${C}  ║${N}  ${BOLD}${W}📈  TICKER-TELLER  v8.0.0${N}                                    ${C}║${N}"
+  echo -e "${C}  ║${N}  ${BOLD}${W}📈  TICKER-TELLER  v3.0.0${N}                                    ${C}║${N}"
   echo -e "${C}  ║${N}  ${D}CNN → BiLSTM → Attention  ×  Monte Carlo  ×  Macro + GDP${N}     ${C}║${N}"
   echo -e "${C}  ╚═══════════════════════════════════════════════════════════════╝${N}"
   echo ""
