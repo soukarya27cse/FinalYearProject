@@ -36,7 +36,6 @@
 28. [API Reference](#28-api-reference)
 29. [Configuration Reference](#29-configuration-reference)
 30. [Known Limitations and Disclaimer](#30-known-limitations-and-disclaimer)
-31. [UI Changelog](#31-ui-changelog)
 
 ---
 
@@ -587,10 +586,6 @@ POSTs directly to `http://127.0.0.1:8000/api/analyze` (bypasses Vite proxy for S
 
 The "Model Architecture" section is collapsible. The Run button is disabled while `running` or when `ticker` is empty.
 
-**Sidebar toggle:** A `◀` / `▶` button collapses the sidebar into a slim 36px rail showing a vertical "SETTINGS" label, maximising chart real estate without losing access to controls. Clicking `▶` expands it back fully.
-
-**Logo mark:** An inline SVG candlestick icon (red/green candles + amber trend polyline) is rendered left of the "Ticker-Teller" wordmark in both the sidebar header and the main page header. No external image asset is required.
-
 ---
 
 ## 11. Frontend — `TrainingProgress.jsx`
@@ -634,13 +629,8 @@ Three vertically stacked charts sharing the same x-axis.
 **Panel 2 — RSI (80px):**
 - Area for RSI fill; reference lines at 70 (overbought) and 30 (oversold)
 
-**Panel 3 — Volume (60px):**
-- Bar chart color-coded by price direction:
-  - **Green** (`rgba(74,222,128,0.55)`) — close >= previous close (bullish/up day)
-  - **Red** (`rgba(248,113,113,0.55)`) — close < previous close (bearish/down day)
-  - First bar defaults to green (no prior reference).
-- Custom tooltip showing date, "Volume" label, and the formatted value (e.g. `45.06M`) in the matching direction color at `fontWeight: 700` for high contrast.
-- `isAnimationActive={false}` for responsive rendering performance.
+**Panel 3 — Volume (50px):**
+- Bar chart in dark navy
 
 ---
 
@@ -711,12 +701,12 @@ All CSS in one file using CSS custom properties throughout.
 ### Core design tokens
 
 ```css
-/* Backgrounds (updated to Screener.in GitHub-dark palette) */
---bg:          #0d1117   /* page */
---bg-surface:  #161b22   /* sidebar, panels */
---bg-card:     #1c2128   /* metric cards */
---bg-card-alt: #161b22   /* expander background */
---bg-raised:   #21262d   /* hover states */
+/* Backgrounds */
+--bg:          #0b0e14   /* page */
+--bg-surface:  #0f1420   /* sidebar, panels */
+--bg-card:     #141927   /* metric cards */
+--bg-card-alt: #111722   /* expander background (darker than card) */
+--bg-raised:   #1a2236   /* hover states */
 
 /* Accent colours */
 --amber:   #fbb03b   /* primary accent */
@@ -726,19 +716,19 @@ All CSS in one file using CSS custom properties throughout.
 --purple:  #a78bfa   /* val loss, model controls */
 --pink:    #f472b6   /* predicted test, signal line */
 
-/* Typography (updated to Inter for Screener.in-style clarity) */
---font-display: 'Inter'           /* headings, upright (not italic) */
---font-heading: 'Inter'           /* buttons, values */
---font-mono:    'IBM Plex Mono'   /* labels, tables, axes */
+/* Typography */
+--font-display: 'Instrument Serif'   /* italic headings */
+--font-heading: 'Space Grotesk'      /* buttons, values */
+--font-mono:    'IBM Plex Mono'      /* labels, tables, axes */
 ```
 
 ### Layout
 
-`.app-shell` — `display: flex; height: 100vh; overflow: hidden`. Sidebar is fixed at 264px when expanded. When collapsed, `.sidebar-collapsed` replaces it at 36px wide with a vertical "SETTINGS" label and expand button. `.main-content` fills the remainder with `overflow-y: auto; padding: 1.5rem`.
+`.app-shell` — `display: flex; height: 100vh; overflow: hidden`. Sidebar is fixed at 264px. `.main-content` fills the remainder with `overflow-y: auto; padding: 1.5rem`.
 
 ### Notable rules
 
-- **Dot-grid background:** `body::before` with `radial-gradient` at 28px grid, neutral grey (`rgba(48,54,61,0.6)`) dots — reduced amber saturation for a cleaner Screener.in-style look.
+- **Dot-grid background:** `body::before` with `radial-gradient` at 28px grid, 4% amber opacity.
 - **Custom scrollbar:** 4px wide, amber on hover.
 - **`.expander`:** `overflow: visible` + `expandFadeIn` (opacity only) — ensures metric cards are never clipped by the container.
 - **`.ham-menu`:** Positioned via JS-computed `top`/`right`. z-index 9999.
@@ -1111,71 +1101,3 @@ pydantic>=2.7.0
 ### ⚠ Disclaimer
 
 **Ticker-Teller is built for educational and research purposes only.** All forecasts, signals, and analyses carry inherent model risk and uncertainty. Past price patterns do not guarantee future results. Nothing produced by this application constitutes financial advice. Do not make investment decisions based solely or primarily on the output of this tool. Always conduct your own due diligence and consult a qualified financial adviser before trading or investing.
-
----
-
-## 31. UI Changelog
-
-This section documents all visual/UI changes made after the initial v3.1 release. No backend logic, data, or model code was modified.
-
-### Typography
-
-- **Font family** changed from `Instrument Serif` (display) + `Space Grotesk` (heading/body) to **`Inter`** across all non-mono text, matching the clean sans-serif style used by [screener.in](https://www.screener.in/).
-- All heading instances that were `font-style: italic` — including the main `Ticker-Teller` header, the "Ready to analyse." landing title, and the sidebar logo wordmark — are now **upright** (`font-style: normal`, `font-weight: 700`, `letter-spacing: -0.02em`).
-
-### Colour Palette & Background
-
-Updated to a **Screener.in / GitHub-dark** inspired palette. Backgrounds are softer and less saturated:
-
-| Token | Before | After |
-|-------|--------|-------|
-| `--bg` | `#0b0e14` | `#0d1117` |
-| `--bg-surface` | `#0f1420` | `#161b22` |
-| `--bg-card` | `#141927` | `#1c2128` |
-| `--bg-raised` | `#1a2236` | `#21262d` |
-| `--border` | `#1e2d45` | `#30363d` |
-| `--border-mid` | `#253650` | `#3d444d` |
-
-The `body::before` dot-grid changed from amber-tinted (`rgba(251,176,59,0.04)`) to neutral grey (`rgba(48,54,61,0.6)`).
-
-### Logo
-
-An inline SVG candlestick logo mark is now displayed in two locations:
-
-- **Main header** — 38×38px, left of the "Ticker-Teller" wordmark inside `.tt-header`.
-- **Sidebar header** — 30×30px, left of the wordmark in the collapsible sidebar panel.
-
-The SVG requires no external assets: one red candle, two green candles, wicks, and an amber trend polyline inside an amber-tinted rounded square.
-
-### Sidebar — Collapsible Toggle
-
-The sidebar now has a `◀` / `▶` toggle button:
-
-- **Expanded (default):** 264px wide. `◀` button appears top-right.
-- **Collapsed:** 36px-wide rail (`.sidebar-collapsed`). Displays a vertical "SETTINGS" label and `▶` expand button. All controls and the Run button are hidden.
-- New CSS classes: `.sidebar-collapsed`, `.sidebar-toggle-btn`, `.sidebar-collapsed-label`.
-
-### PriceChart — Volume Bars
-
-Volume bars are now **color-coded by price direction**:
-
-- Green (`rgba(74,222,128,0.55)`) when `close >= prev_close` (bullish day).
-- Red (`rgba(248,113,113,0.55)`) when `close < prev_close` (bearish day).
-- First bar defaults to green (no previous reference).
-
-The volume tooltip was rewritten as a custom component with `background: #161b22`, `fontWeight: 700` value text in the matching direction color, and a clean date label — replacing the near-invisible default Recharts tooltip.
-
-### PriceChart — Price Tooltip
-
-The main price chart tooltip was rewritten with:
-
-- A `SERIES_CONFIG` map controlling which series are visible (`BB Upper`, `BB Lower`, and forecast band `Area` series are all hidden).
-- Band series also filtered by `dataKey` (catches unnamed `forecast_lower` Area).
-- All value colors explicit and high-contrast: cyan (Historical), pink (Predicted), green (MC Forecast).
-- Tooltip background updated to `#161b22` with `#30363d` border.
-
-### GdpPanel — Forecast Tooltip & Active Dots
-
-- Tooltip replaced with a custom `content` renderer that filters `dataKey.endsWith('_up')` and `dataKey.endsWith('_dn')` — only the 7 country line values are shown.
-- `_up` / `_dn` Area series now carry `activeDot={false}` to suppress the stacked hover circles that previously appeared at each data point.
-- Country `Line` series use `activeDot={{ r: 3, strokeWidth: 0, fill: color }}` — small solid dot in the line's own color, one per line.
