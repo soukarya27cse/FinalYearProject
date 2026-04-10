@@ -789,8 +789,8 @@ Input: [Batch × SeqLen × 31]
          ▼ permute to [B × 31 × SeqLen]
 ┌─────────────────────────────────────┐
 │         TemporalConvBlock           │
-│  Conv1d(k=3, pad=1) → BN → GELU ─┐ │
-│  Conv1d(k=5, pad=2) → BN → GELU ─┘ │→ concat channels
+│  Conv1d(k=3, pad=1) → BN → GELU ─┐  │
+│  Conv1d(k=5, pad=2) → BN → GELU ─┘  │→ concat channels
 │  Conv1d(1×1)        → BN → GELU     │
 │  + Residual (1×1 conv or Identity)  │
 │  + Dropout                          │
@@ -801,15 +801,15 @@ Input: [Batch × SeqLen × 31]
 │   Bidirectional LSTM (2 layers)     │
 │   Input:  cnn_channels              │
 │   Hidden: H (per direction)         │
-│   Output: [B × SeqLen × H×2]       │
+│   Output: [B × SeqLen × H×2]        │
 └─────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────┐
 │   MultiHeadAttentionBlock           │
-│   MHA(Q=K=V) → Dropout             │
-│   + Residual → LayerNorm           │
-│   Output: [B × SeqLen × H×2]       │
+│   MHA(Q=K=V) → Dropout              │
+│   + Residual → LayerNorm            │
+│   Output: [B × SeqLen × H×2]        │
 └─────────────────────────────────────┘
          │
          ▼ Temporal Weighted Pooling
@@ -819,9 +819,9 @@ Input: [Batch × SeqLen × 31]
          ▼
 ┌─────────────────────────────────────┐
 │   MLP Head                          │
-│   Dropout(p) → Linear(H×2 → H)     │
-│   → GELU → Dropout(p/2)            │
-│   → Linear(H → 1)                  │
+│   Dropout(p) → Linear(H×2 → H)      │
+│   → GELU → Dropout(p/2)             │
+│   → Linear(H → 1)                   │
 └─────────────────────────────────────┘
          │
          ▼
@@ -863,17 +863,17 @@ OHLCV + Macro data
          ▼
     Trained HybridModel
          │
-    ┌────┴────────────────────────────────┐
-    │                                     │
-predict_test_set()              monte_carlo_forecast()
-    │                                     │
-pred_log_returns            {mean, std} × forecast_days
-actual_log_returns                        │
-    │                              price series + bands
-    ▼                                     │
-returns_to_prices()               ────► forecast chart
+    ┌────┴──────────────────────────────────────────────┐
+    │                                                   │
+predict_test_set()                           monte_carlo_forecast()
+    │                                                   │
+pred_log_returns                            {mean, std} × forecast_days
+actual_log_returns                                      │
+    │                                           price series + bands
+    ▼                                                   │
+returns_to_prices()                          ────► forecast chart
     │
-    ├── pred_prices (cumulative)   ──► compute_metrics()
+    ├── pred_prices (cumulative)     ──► compute_metrics()
     └── pred_prices_chart (anchored) ──► test chart display
 ```
 
