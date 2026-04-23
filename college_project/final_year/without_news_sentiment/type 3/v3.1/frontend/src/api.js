@@ -1,5 +1,5 @@
 /**
- * api.js — Ticker-Teller Frontend API v3
+ * api.js — Ticker-Teller Frontend API v3.1.0
  * Direct connection to backend (127.0.0.1:8000) to ensure SSE stability.
  */
 
