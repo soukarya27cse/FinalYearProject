@@ -86,7 +86,7 @@ export function AboutModal({ onClose }) {
     <div className="modal-overlay" onClick={handleOverlay}>
       <div className="modal-box">
         <button className="modal-close" onClick={onClose}>✕ Close</button>
-        <div className="modal-title">About Ticker-Teller v3.1</div>
+        <div className="modal-title">About Ticker-Teller v3.1.0</div>
         <div className="modal-body">
           <p>
             A full-stack stock forecasting system: <strong>FastAPI</strong> Python backend +{' '}
