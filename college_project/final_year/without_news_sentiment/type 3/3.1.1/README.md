@@ -485,16 +485,7 @@ Returns: `{ "status": "ok", "version": "3.1.1", "device": "cpu|cuda", "features"
 
 ---
 
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/ticker-teller.git
-cd ticker-teller
-```
-
----
-
-### 2. Backend
+### 1. Backend
 
 ```bash
 cd backend
@@ -515,7 +506,7 @@ The backend will be available at `http://127.0.0.1:8000`. Visit `/docs` for the 
 
 ---
 
-### 3. Frontend
+### 2. Frontend
 
 ```bash
 cd frontend
@@ -528,7 +519,7 @@ The dev server starts at `http://localhost:5173`. All `/api/*` requests are prox
 
 ---
 
-### 4. (Optional) Production Build
+### 3. (Optional) Production Build
 
 ```bash
 # Frontend
@@ -543,7 +534,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ---
 
-### 5. Docker (optional sketch)
+### 4. Docker (optional sketch)
 
 ```dockerfile
 # backend/Dockerfile
