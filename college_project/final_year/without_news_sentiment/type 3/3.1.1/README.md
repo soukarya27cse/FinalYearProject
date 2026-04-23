@@ -136,7 +136,7 @@ Input: [Batch, SeqLen, 31 Features]
 │  TemporalConvBlock (Inception-style CNN)    │
 │  ├── Conv1d(kernel=3) → BN → GELU           │
 │  ├── Conv1d(kernel=5) → BN → GELU           │
-│  ├── Concat → Conv1d(1×1) → BN → GELU      │
+│  ├── Concat → Conv1d(1×1) → BN → GELU       │
 │  └── Residual projection + Dropout          │
 └─────────────────────────────────────────────┘
          │  [Batch, SeqLen, CNN_Channels]
