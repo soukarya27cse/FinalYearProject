@@ -37,25 +37,11 @@ The frontend is a single-page React/Vite application with dark-mode design, live
 ## Live Demo Preview
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  Sidebar (Settings)    │   Header: Ticker-Teller v3.1.1                  
-│  ─────────────────     │   CNN → BiLSTM → Attention · MC Forecast ·      
-│  Ticker: AAPL          │   FCM Risk · 31 Features                        
-│  History: 730 days     │──────────────────────────────────────────────── │
-│  Seq Length: 60        │   ◎ Current Price   ◈ Forecast   ◐ Dir. Acc.   
-│  Forecast: 5 days      │   ◑ MAE (Test)      ◒ Ann. Vol.                 
-│  ─────────────────     │──────────────────────────────────────────────── │
-│  BiLSTM: 128           │   AI Signal: [BULL / BEAR / NEUTRAL]            
-│  CNN Ch: 64            │   Train N  |  Val N  |  Test N                  
-│  Heads: 4              │──────────────────────────────────────────────── │
-│  Dropout: 0.2          │   Tabs: Price Chart │ Model Performance │ MACD  
-│  ─────────────────     │   ─────────────────────────────────────────     
-│  Epochs: 50            │   [Price + BB Bands + MC Forecast Chart]        
-│  Patience: 10          │   [RSI sub-chart]                               
-│  ─────────────────     │   [Volume bars]                                 
-│  ▶  Run  AAPL         │──────────────────────────────────────────────── │
-│                        │  ☰ More Analysis                                
-└──────────────────────────────────────────────────────────────────────────┘
+<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/29d15029-9edf-4788-aeb9-a01cad4c9b8f" />
+
+<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/75c988c7-e35f-408b-a48e-0fc29c89421f" />
+
+
 ```
 
 ---
