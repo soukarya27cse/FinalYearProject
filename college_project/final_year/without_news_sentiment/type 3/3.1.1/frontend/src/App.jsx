@@ -1,9 +1,9 @@
 /**
- * App.jsx — Ticker-Teller v3.3
+ * App.jsx — Ticker-Teller v3.1.1
  * Fixes:
  *  - TickerLogo extracted as shared component (was duplicated in App + Sidebar)
  *  - FcmRiskPanel integrated into Model Performance tab
- *  - Version string updated to 3.3
+ *  - Version string updated to 3.1.1
  *  - Correlations nav hint: explains run-first requirement
  *  - result.model null-safety: ModelExpander already guards with `if (!model) return null`
  */
@@ -220,7 +220,7 @@ export default function App() {
           </div>
           <div className="tt-meta">
             FastAPI + React/Vite<br />
-            <span className="tt-meta-version">v3.3.0</span>
+            <span className="tt-meta-version">v3.1.1</span>
           </div>
         </div>
 
@@ -262,7 +262,7 @@ export default function App() {
           /* ── Analysis view ── */
           <>
             {/* Training progress */}
-            {(running || statusMsgs.length > 0) && !result && (
+            {(running || statusMsgs.length > 0) && !result && !error && (
               <TrainingProgress
                 status={running}
                 epochInfo={epochInfo}
