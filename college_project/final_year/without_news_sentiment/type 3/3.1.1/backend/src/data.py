@@ -590,33 +590,6 @@ def returns_to_prices(log_returns: np.ndarray, start_price: float) -> np.ndarray
     return prices
 
 
-# ── Fuzzy C-Means Risk Analysis ───────────────────────────────────────────────
-def compute_fcm_risk(df: pd.DataFrame) -> dict:
-    """
-    Fuzzy C-Means (FCM) risk segregation as suggested by professor.
-
-    Methodology:
-      1. Build a 3-feature risk matrix per trading day:
-           - 21-day rolling annualised volatility
-           - 60-day rolling beta (vs SPY proxy via Mkt_Return)
-           - 60-day rolling drawdown
-      2. Run FCM with c=2 clusters (high-risk, low-risk).
-         FCM produces *soft* membership degrees [0,1] for every observation
-         — unlike k-means which gives a binary label.
-      3. Identify which cluster is "high risk" by comparing cluster centres
-         on the volatility axis.
-      4. Group trading days by calendar year; compute the mean high-risk
-         fuzzy membership for each year → "year-wise fuzzy risk value".
-      5. Return the yearly means plus an overall mean (the professor's
-         "take the mean" requirement) and today's real-time risk score.
-
-    Returns a dict with:
-      - yearly:        {year: mean_high_risk_membership}
-      - overall_mean:  float   (mean across all years)
-      - current_score: float   (latest day's high-risk membership)
-      - risk_label:    str     ("High Risk" / "Moderate Risk" / "Low Risk")
-      - cluster_centers: list  (volatility of each FCM cluster centre)
-    """
 # ── Pure-NumPy Fuzzy C-Means ──────────────────────────────────────────────────
 def _fuzzy_cmeans(
     X: np.ndarray,
@@ -668,8 +641,8 @@ def _fuzzy_cmeans(
         # Avoid division by zero for points exactly on a centre
         dist = np.fmax(dist, 1e-12)
 
-        # u[k, i] = 1 / sum_j( (dist[k,i] / dist[j,i])^(1/(m-1)) )
-        exp = 1.0 / (m - 1.0)
+        # u[k, i] = 1 / sum_j( (dist[k,i] / dist[j,i])^(2/(m-1)) )
+        exp = 2.0 / (m - 1.0)
         u = np.zeros((c, n_samples))
         for k in range(c):
             ratio = dist[k] / dist              # (c, n_samples)
@@ -757,8 +730,12 @@ def compute_fcm_risk(df: pd.DataFrame) -> dict:
         if np.isnan(u).any() or np.isnan(cntr).any():
             return _fcm_fallback(error="FCM produced NaN — degenerate data")
 
-        # High-risk cluster = higher normalised-volatility centre
-        vol_centres   = cntr[:, 0]
+        # High-risk cluster = higher normalised-volatility centre.
+        # Look up "vol" by its position in the *surviving* feature columns
+        # (zero-variance columns may have been dropped, shifting indices).
+        feat_cols     = list(feats.columns)
+        vol_feat_idx  = feat_cols.index("vol") if "vol" in feat_cols else 0
+        vol_centres   = cntr[:, vol_feat_idx]
         high_risk_idx = int(np.argmax(vol_centres))
         high_risk_u   = u[high_risk_idx]
 
