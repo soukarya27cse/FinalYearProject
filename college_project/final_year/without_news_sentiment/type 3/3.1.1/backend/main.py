@@ -65,6 +65,7 @@ class _Enc(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (np.integer,)):    return int(obj)
         if isinstance(obj, (np.floating,)):   return float(obj)
+        if isinstance(obj, np.bool_):         return bool(obj)
         if isinstance(obj, np.ndarray):       return obj.tolist()
         if isinstance(obj, pd.Timestamp):     return obj.isoformat()
         return super().default(obj)
@@ -339,7 +340,11 @@ async def analyze(cfg: AnalyzeConfig):
         finally:
             asyncio.run_coroutine_threadsafe(queue.put(None), loop)
 
-    loop.run_in_executor(_train_executor, run)
+    future = loop.run_in_executor(_train_executor, run)
+    future.add_done_callback(
+        lambda f: f.exception() and
+        print(f"[analyze] unhandled executor error: {f.exception()}")
+    )
 
     async def event_generator() -> AsyncGenerator[str, None]:
         try:
