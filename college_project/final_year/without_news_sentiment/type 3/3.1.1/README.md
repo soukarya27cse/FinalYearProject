@@ -39,6 +39,11 @@ The frontend is a single-page React/Vite application with dark-mode design, live
 <img width="1920" height="1031" alt="opening window" src="https://github.com/user-attachments/assets/29d15029-9edf-4788-aeb9-a01cad4c9b8f">
 <br>
 <img width="1920" height="1031" alt="running ticker=AAPL" src="https://github.com/user-attachments/assets/75c988c7-e35f-408b-a48e-0fc29c89421f">
+<br>
+<img width="1920" height="1031" alt="fuzzy logic implementation,AAPL" src="https://github.com/user-attachments/assets/367bed41-1bdf-44f0-a5cf-fcf89aabda63" />
+<img width="1920" height="950" alt="continuation" src="https://github.com/user-attachments/assets/a0ba7d63-1c50-4b51-a0da-88fdbd3c3982" />
+<br>
+<img width="1920" height="950" alt="MACD" src="https://github.com/user-attachments/assets/d8e24642-3603-449b-ac96-6857aa0351d6" />
 
 ---
 
