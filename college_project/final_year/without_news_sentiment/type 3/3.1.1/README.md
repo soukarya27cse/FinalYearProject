@@ -36,13 +36,10 @@ The frontend is a single-page React/Vite application with dark-mode design, live
 
 ## Live Demo Preview
 
-```
-<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/29d15029-9edf-4788-aeb9-a01cad4c9b8f" />
-
-<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/75c988c7-e35f-408b-a48e-0fc29c89421f" />
+<img width="1920" height="1031" alt="opening window" src="https://github.com/user-attachments/assets/29d15029-9edf-4788-aeb9-a01cad4c9b8f">
 
 
-```
+<img width="1920" height="1031" alt="running ticker=AAPL" src="https://github.com/user-attachments/assets/75c988c7-e35f-408b-a48e-0fc29c89421f">
 
 ---
 
@@ -93,7 +90,7 @@ Browser (React / Vite)
         ▼
 FastAPI Backend (Python 3.11+)
         │
-        ├── /api/analyze          POST — SSE stream (train + forecast)
+        ├── /api/analyze           POST — SSE stream (train + forecast)
         ├── /api/commodities       GET  — Holt-Winters commodity forecast
         ├── /api/gdp               GET  — ETF-based GDP proxy + forecast
         ├── /api/bonds             GET  — US Treasuries + ETF yield proxies
