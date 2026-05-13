@@ -34,3 +34,13 @@ Error: connect ECONNREFUSED 127.0.0.1:8000
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
+
+> ticker-teller-ui@3.1.1 dev
+> vite --port 5173
+
+Re-optimizing dependencies because vite config has changed
+
+  VITE v5.4.21  ready in 436 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
