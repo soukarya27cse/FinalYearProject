@@ -1,0 +1,36 @@
+
+> ticker-teller-ui@3.1.1 dev
+> vite --port 5173
+
+
+  VITE v5.4.21  ready in 322 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+1:50:26 PM [vite] http proxy error: /api/analyze
+Error: connect ECONNREFUSED 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)
+1:50:31 PM [vite] http proxy error: /api/analyze
+Error: connect ECONNREFUSED 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)
+1:50:33 PM [vite] http proxy error: /api/analyze
+Error: connect ECONNREFUSED 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)
+
+> ticker-teller-ui@3.1.1 dev
+> vite --port 5173
+
+
+  VITE v5.4.21  ready in 643 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+
+> ticker-teller-ui@3.1.1 dev
+> vite --port 5173
+
+
+  VITE v5.4.21  ready in 265 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
